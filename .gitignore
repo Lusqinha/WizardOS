@@ -1,0 +1,4 @@
+.superpowers/
+uploads/*
+!uploads/.gitkeep
+data/library.json
