@@ -90,12 +90,11 @@
   // relogio no menu-bar (estilo poolsuite)
   const clk = document.getElementById('clock');
   if (clk) {
-    const WD = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
-    const MO = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+    const WD = ['DOM','SEG','TER','QUA','QUI','SEX','SAB'];
     const p = (n) => String(n).padStart(2, '0');
     const upd = () => {
       const d = new Date();
-      clk.textContent = `${WD[d.getDay()]} ${p(d.getDate())} ${MO[d.getMonth()]} ${d.getFullYear()}  ${p(d.getHours())}:${p(d.getMinutes())}`;
+      clk.textContent = `${WD[d.getDay()]} ${p(d.getDate())}/${p(d.getMonth() + 1)}/${d.getFullYear()}  ${p(d.getHours())}:${p(d.getMinutes())}`;
     };
     upd();
     setInterval(upd, 15000);

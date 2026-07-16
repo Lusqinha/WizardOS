@@ -61,3 +61,10 @@ body{margin:0;min-height:100vh;background:var(--wall);color:var(--ink);
 
 #credits{position:fixed;bottom:0;left:0;width:100%;text-align:center;
   font-size:8px;padding:3px;color:#9a7d7a;letter-spacing:.3px;}
+
+/* --- override System.css (fontes Chicago dao 404) + escala --- */
+body, body *:not(.hn){font-family:'Silkscreen','Geneva',monospace !important;}
+.timer .readout{font-family:'VT323',monospace !important;font-size:2rem !important;}
+.window{width:300px !important;}
+.title{font-size:11px !important;}
+.timer{margin-bottom:10px !important;}
