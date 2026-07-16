@@ -4,9 +4,15 @@ body { margin: 0; min-height: 100vh; background: var(--wall);
   image-rendering: pixelated; font-family: "Geneva", "Chicago", monospace; }
 .menu-bar { background:#fff; border-bottom:2px solid #000; padding:2px 10px;
   display:flex; gap:14px; font-weight:bold; position:sticky; top:0; z-index:10; }
-#desktop { display:grid; grid-template-columns:repeat(2,minmax(280px,1fr));
-  gap:18px; padding:18px; max-width:900px; margin:0 auto; }
+#desktop { position:relative; min-height:calc(100vh - 90px); overflow:hidden; }
+.window { position:absolute; width:320px; }
+.window .title-bar { cursor:move; user-select:none; }
+.window.rolled .window-pane { display:none; }
 .window-pane { padding:10px; }
+#dock { position:fixed; left:0; bottom:22px; width:100%; display:flex; gap:6px;
+  padding:4px 8px; background:#fff; border-top:2px solid #000; min-height:26px; z-index:9000; }
+#dock:empty { display:none; }
+#dock button { font-size:12px; }
 .item-list { list-style:none; margin:0 0 8px; padding:0; }
 .item-list li { display:flex; align-items:center; gap:6px; padding:3px 0;
   border-bottom:1px dotted #000; }
