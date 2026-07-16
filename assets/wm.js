@@ -13,6 +13,12 @@
     'win-sfx':     { x: 20,  y: 300 },
     'win-timers':  { x: 360, y: 300 },
   };
+  const ICONS = {
+    'win-track':   'hn-music-solid',
+    'win-ambient': 'hn-cloud-rain-solid',
+    'win-sfx':     'hn-bolt-solid',
+    'win-timers':  'hn-clock-solid',
+  };
 
   let layout;
   try { layout = JSON.parse(localStorage.getItem(WM_KEY)) || {}; } catch { layout = {}; }
@@ -30,13 +36,16 @@
 
   function focus(win) { win.style.zIndex = ++z; }
 
+  // dock = launcher fixo com todos os apps (icone + label); clique abre/foca
   function renderDock() {
     dock.innerHTML = '';
     for (const win of wins) {
-      if (!stOf(win.id).closed) continue;
+      const st = stOf(win.id);
       const b = document.createElement('button');
-      b.textContent = win.querySelector('.title').textContent;
-      b.onclick = () => { stOf(win.id).closed = false; save(); render(win); focus(win); };
+      b.type = 'button';
+      b.className = 'dock-app' + (st.closed ? '' : ' open');
+      b.innerHTML = `<i class="hn ${ICONS[win.id] || 'hn-square'}"></i><span>${win.querySelector('.title').textContent}</span>`;
+      b.onclick = () => { st.closed = false; st.rolled = false; save(); render(win); focus(win); };
       dock.appendChild(b);
     }
   }
@@ -76,5 +85,19 @@
     });
 
     render(win);
+  }
+
+  // relogio no menu-bar (estilo poolsuite)
+  const clk = document.getElementById('clock');
+  if (clk) {
+    const WD = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+    const MO = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+    const p = (n) => String(n).padStart(2, '0');
+    const upd = () => {
+      const d = new Date();
+      clk.textContent = `${WD[d.getDay()]} ${p(d.getDate())} ${MO[d.getMonth()]} ${d.getFullYear()}  ${p(d.getHours())}:${p(d.getMinutes())}`;
+    };
+    upd();
+    setInterval(upd, 15000);
   }
 })();

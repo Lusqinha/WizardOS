@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="assets/app.css">
 </head>
 <body>
-<div class="menu-bar"><span class="apple"></span><span>RPG Soundboard</span></div>
+<div class="menu-bar"><span class="brand"><i class="hn hn-music-solid"></i> RPG Soundboard</span><span id="clock"></span></div>
 <main id="desktop">
   <section class="window" id="win-track">
     <div class="title-bar"><h1 class="title">Trilha</h1>
