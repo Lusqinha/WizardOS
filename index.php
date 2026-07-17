@@ -31,7 +31,10 @@
     <div class="title-bar"><div class="title-bar-text">Efeitos</div>
       <div class="title-bar-controls"><button aria-label="Minimize" class="wm-min"></button><button aria-label="Close" class="wm-close"></button></div></div>
     <div class="window-body"><ul class="sfx-grid" data-cat="sfx"></ul>
-      <button class="btn-add" data-cat="sfx"><i class="hn hn-plus"></i> adicionar</button>
+      <div class="sfx-actions">
+        <button class="btn-add" data-cat="sfx"><i class="hn hn-plus"></i> adicionar</button>
+        <button class="btn-delmode" data-cat="sfx"><i class="hn hn-trash"></i> remover</button>
+      </div>
     </div>
   </section>
   <section class="window" id="win-timers">

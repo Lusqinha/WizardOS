@@ -218,18 +218,26 @@ async function playSfx(item) {
   }
 }
 
+let sfxDeleteMode = false;
+function initSfxDelete() {
+  const btn = document.querySelector('.btn-delmode[data-cat="sfx"]');
+  const ul = document.querySelector('.sfx-grid[data-cat="sfx"]');
+  if (!btn || !ul) return;
+  btn.addEventListener('click', () => {
+    sfxDeleteMode = !sfxDeleteMode;
+    ul.classList.toggle('del-mode', sfxDeleteMode);
+    btn.classList.toggle('active', sfxDeleteMode);
+  });
+}
+initSfxDelete();
+
 function renderSfx() {
   const ul = document.querySelector('.sfx-grid[data-cat="sfx"]');
   ul.innerHTML = '';
   for (const it of itemsOf('sfx')) {
     const li = document.createElement('li');
-    li.innerHTML = `<button class="btn-sfx" title="Clique: tocar · Botão direito: remover">${escapeHtml(it.title)}</button>`;
-    const btn = li.querySelector('.btn-sfx');
-    btn.onclick = () => playSfx(it);
-    btn.addEventListener('contextmenu', (e) => {
-      e.preventDefault();
-      if (confirm(`Remover efeito "${it.title}"?`)) removeItem(it.id);
-    });
+    li.innerHTML = `<button class="btn-sfx">${escapeHtml(it.title)}</button>`;
+    li.querySelector('.btn-sfx').onclick = () => sfxDeleteMode ? removeItem(it.id) : playSfx(it);
     ul.appendChild(li);
   }
 }

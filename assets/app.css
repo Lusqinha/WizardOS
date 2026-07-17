@@ -59,6 +59,10 @@ body{margin:0;min-height:100vh;background:var(--wall);color:var(--ink);
 .sfx-grid .btn-sfx{flex:1;min-width:0;padding:9px 6px;text-align:center;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 #desktop #win-sfx{width:400px;}
+.sfx-actions{display:flex;gap:6px;flex-wrap:wrap;}
+.btn-delmode.active{border-style:inset;font-weight:bold;}
+.sfx-grid.del-mode .btn-sfx{background:#c88;cursor:not-allowed;}
+.sfx-grid.del-mode .btn-sfx:hover{background:#e05a5a;color:#fff;}
 
 /* timers */
 .timer{text-align:center;margin-bottom:14px;}
