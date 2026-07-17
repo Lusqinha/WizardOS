@@ -93,7 +93,13 @@ if (PHP_SAPI !== 'cli') {
     $lib = load($DATA);
     switch ($action) {
       case 'list':
-        $respond(['ok' => true, 'items' => $lib['items']]);
+        $respond(['ok' => true, 'items' => $lib['items'], 'notes' => $lib['notes'] ?? '']);
+        break;
+      case 'save-notes':
+        $in = json_decode((string)file_get_contents('php://input'), true) ?: [];
+        $lib['notes'] = (string)($in['notes'] ?? '');
+        save($DATA, $lib);
+        $respond(['ok' => true]);
         break;
       case 'add-link':
         $in = json_decode((string)file_get_contents('php://input'), true) ?: [];
@@ -155,7 +161,7 @@ if (PHP_SAPI !== 'cli') {
           if (($it['source'] ?? '') === 'mp3file') $it['ref'] = basename((string)$it['ref']);
         }
         unset($it);
-        save($DATA, ['items' => array_values($data['items'])]);
+        save($DATA, ['items' => array_values($data['items']), 'notes' => (string)($data['notes'] ?? '')]);
         $respond(['ok' => true, 'count' => count($data['items'])]);
         break;
       default:

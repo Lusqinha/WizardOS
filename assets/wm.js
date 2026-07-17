@@ -12,18 +12,21 @@
     'win-ambient': { x: 360, y: 20 },
     'win-sfx':     { x: 20,  y: 300 },
     'win-timers':  { x: 360, y: 300 },
+    'win-notes':   { x: 700, y: 20 },
   };
   const APP_ICON = {
     'win-track':   'assets/icons/track.png',
     'win-ambient': 'assets/icons/ambient.png',
     'win-sfx':     'assets/icons/sfx.png',
     'win-timers':  'assets/icons/timers.png',
+    'win-notes':   'assets/icons/notes.png',
   };
   const TB_ICON = {
     'win-track':   'assets/icons/track-tb.png',
     'win-ambient': 'assets/icons/ambient-tb.png',
     'win-sfx':     'assets/icons/sfx-tb.png',
     'win-timers':  'assets/icons/timers-tb.png',
+    'win-notes':   'assets/icons/notes-tb.png',
   };
 
   let layout;

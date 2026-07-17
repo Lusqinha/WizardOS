@@ -1,10 +1,12 @@
-<?php // ponytail: index estático; PHP só pra manter tudo sob o mesmo servidor ?>
+<?php ?>
 <!doctype html>
 <html lang="pt-br">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>RPG Soundboard</title>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="assets/icons/track.png">
 <link rel="stylesheet" href="assets/98.css">
 <link rel="stylesheet" href="assets/pixel-icons.css">
 <link rel="stylesheet" href="assets/app.css">
@@ -38,8 +40,13 @@
       <div class="title-bar-controls"><button aria-label="Minimize" class="wm-min"></button><button aria-label="Close" class="wm-close"></button></div></div>
     <div class="window-body" id="timers"></div>
   </section>
+  <section class="window" id="win-notes">
+    <div class="title-bar"><div class="title-bar-text">Notas</div>
+      <div class="title-bar-controls"><button aria-label="Minimize" class="wm-min"></button><button aria-label="Close" class="wm-close"></button></div></div>
+    <div class="window-body"><textarea id="notes" placeholder="Anotações da mesa..."></textarea></div>
+  </section>
 </main>
-<footer id="credits">Pixel Icon Library — CC BY 4.0 (HackerNoon) · 98.css — MIT</footer>
+<footer id="credits">Ta em desenvolvimento ainda pae</footer>
 <div id="start-menu" hidden>
   <button data-act="export">Exportar config (.zip)</button>
   <button data-act="import">Importar config (.zip)</button>

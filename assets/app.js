@@ -374,3 +374,16 @@ function initTimers() {
 
 initTimers();
 refresh().catch(e => console.error(e));
+
+// notas: carrega do servidor e autosalva (debounced) — vao junto no export
+async function initNotes() {
+  const ta = document.getElementById('notes');
+  if (!ta) return;
+  try { ta.value = (await api('list')).notes || ''; } catch (e) { console.error(e); }
+  let t;
+  ta.addEventListener('input', () => {
+    clearTimeout(t);
+    t = setTimeout(() => api('save-notes', { notes: ta.value }).catch(e => console.error(e)), 500);
+  });
+}
+initNotes();
