@@ -108,8 +108,9 @@ body, body *:not(.hn){font-family:'ms_sans_serif','Pixelated MS Sans Serif',sans
 .book-view{flex:1;min-height:120px;width:100%;margin-top:8px;background:#fff;
   border:1px solid #808080;border-color:#808080 #fff #fff #808080;}
 .book-view:not([src]),.book-view[src=""]{display:none;}
-#desktop #win-books{width:480px;height:560px;display:flex;flex-direction:column;}
-#win-books .window-body{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;}
+#desktop #win-books{width:480px;height:560px;}
+#desktop #win-books:not([hidden]){display:flex;flex-direction:column;}
+#win-books:not(.rolled) .window-body{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;}
 .timer .t-del{margin-left:4px;}
 #desktop .window{width:300px;min-width:230px;min-height:90px;resize:both;overflow:auto;}
 #add-dialog{position:fixed;inset:0;margin:auto;width:340px;max-width:92vw;

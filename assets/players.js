@@ -202,4 +202,8 @@ function renderBooks() {
     li.querySelector('.btn-del').onclick = () => removeItem(it.id);
     ul.appendChild(li);
   }
+  // se o livro aberto foi removido, fecha o viewer
+  const view = document.querySelector('.book-view');
+  const shown = view && view.getAttribute('src');
+  if (shown && !itemsOf('pdf').some(it => srcOf(it) === shown)) view.removeAttribute('src');
 }
