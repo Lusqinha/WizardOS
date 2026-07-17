@@ -223,11 +223,13 @@ function renderSfx() {
   ul.innerHTML = '';
   for (const it of itemsOf('sfx')) {
     const li = document.createElement('li');
-    li.innerHTML = `
-      <button class="btn-sfx">${escapeHtml(it.title)}</button>
-      <button class="btn-del" title="remover"><i class="hn hn-trash"></i></button>`;
-    li.querySelector('.btn-sfx').onclick = () => playSfx(it);
-    li.querySelector('.btn-del').onclick = () => removeItem(it.id);
+    li.innerHTML = `<button class="btn-sfx" title="Clique: tocar · Botão direito: remover">${escapeHtml(it.title)}</button>`;
+    const btn = li.querySelector('.btn-sfx');
+    btn.onclick = () => playSfx(it);
+    btn.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      if (confirm(`Remover efeito "${it.title}"?`)) removeItem(it.id);
+    });
     ul.appendChild(li);
   }
 }
