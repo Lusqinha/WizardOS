@@ -86,7 +86,9 @@
 
 <div id="yt-hosts" style="position:absolute;left:-9999px;top:0"></div>
 <script src="https://www.youtube.com/iframe_api"></script>
-<script src="assets/app.js" defer></script>
+<script src="assets/core.js" defer></script>
+<script src="assets/players.js" defer></script>
+<script src="assets/ui.js" defer></script>
 <script src="assets/wm.js" defer></script>
 </body>
 </html>

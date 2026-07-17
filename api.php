@@ -81,6 +81,26 @@ function delete_item(array $lib, string $id, string $uploadsDir): array {
   return $lib;
 }
 
+// Valida/normaliza um item vindo de fonte externa (import). Retorna null se invalido.
+function sanitize_item(array $it): ?array {
+  $cat = (string)($it['category'] ?? '');
+  $src = (string)($it['source'] ?? '');
+  if (!in_array($cat, CATEGORIES, true)) return null;
+  if (!in_array($src, ['youtube', 'mp3url', 'mp3file'], true)) return null;
+  $title = trim((string)($it['title'] ?? ''));
+  if ($title === '') return null;
+  $ref = (string)($it['ref'] ?? '');
+  if ($src === 'youtube') { $ref = yt_id($ref) ?? ''; if ($ref === '') return null; }
+  elseif ($src === 'mp3url') { if (!preg_match('~^https?://~i', $ref)) return null; }
+  else { $ref = basename($ref); if ($ref === '') return null; }
+  $id = (string)($it['id'] ?? '');
+  return [
+    'id' => $id !== '' ? $id : uuid(),
+    'category' => $cat, 'source' => $src, 'title' => $title, 'ref' => $ref,
+    'loop' => !empty($it['loop']),
+  ];
+}
+
 // --- Router HTTP (so quando servido, nao no include do teste) ---
 if (PHP_SAPI !== 'cli') {
   header('Content-Type: application/json; charset=utf-8');
@@ -157,12 +177,13 @@ if (PHP_SAPI !== 'cli') {
           }
         }
         $zip->close();
-        foreach ($data['items'] as &$it) {
-          if (($it['source'] ?? '') === 'mp3file') $it['ref'] = basename((string)$it['ref']);
+        $clean = [];
+        foreach ($data['items'] as $it) {
+          $c = sanitize_item((array)$it);
+          if ($c !== null) $clean[] = $c;
         }
-        unset($it);
-        save($DATA, ['items' => array_values($data['items']), 'notes' => (string)($data['notes'] ?? '')]);
-        $respond(['ok' => true, 'count' => count($data['items'])]);
+        save($DATA, ['items' => $clean, 'notes' => (string)($data['notes'] ?? '')]);
+        $respond(['ok' => true, 'count' => count($clean)]);
         break;
       default:
         http_response_code(404);

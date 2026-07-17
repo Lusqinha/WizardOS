@@ -53,4 +53,10 @@ save($tmp, $lib);
 check(load($tmp) == $lib, 'save/load round-trip');
 unlink($tmp);
 
+// sanitize_item (import): valida/normaliza itens externos
+check(sanitize_item(['category'=>'track','source'=>'youtube','title'=>'x','ref'=>'https://youtu.be/dQw4w9WgXcQ'])['ref'] === 'dQw4w9WgXcQ', 'sanitize_item extrai videoId');
+check(sanitize_item(['category'=>'hack','source'=>'mp3url','title'=>'x','ref'=>'https://a.mp3']) === null, 'sanitize_item rejeita categoria invalida');
+check(sanitize_item(['category'=>'sfx','source'=>'mp3file','title'=>'x','ref'=>'../../etc/passwd'])['ref'] === 'passwd', 'sanitize_item basename evita path traversal');
+check(sanitize_item(['category'=>'ambient','source'=>'mp3url','title'=>' ','ref'=>'https://a.mp3']) === null, 'sanitize_item rejeita titulo vazio');
+
 echo "\nTODOS OS TESTES PASSARAM\n";
