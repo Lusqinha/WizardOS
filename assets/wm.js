@@ -13,11 +13,11 @@
     'win-sfx':     { x: 20,  y: 300 },
     'win-timers':  { x: 360, y: 300 },
   };
-  const ICONS = {
-    'win-track':   'hn-music-solid',
-    'win-ambient': 'hn-cloud-rain-solid',
-    'win-sfx':     'hn-bolt-solid',
-    'win-timers':  'hn-clock-solid',
+  const APP_ICON = {
+    'win-track':   'assets/icons/track.png',
+    'win-ambient': 'assets/icons/ambient.png',
+    'win-sfx':     'assets/icons/sfx.png',
+    'win-timers':  'assets/icons/timers.png',
   };
 
   let layout;
@@ -44,7 +44,7 @@
       const b = document.createElement('button');
       b.type = 'button';
       b.className = 'dock-app' + (st.closed ? '' : ' open');
-      b.innerHTML = `<i class="hn ${ICONS[win.id] || 'hn-square'}"></i><span>${win.querySelector('.title-bar-text').textContent}</span>`;
+      b.innerHTML = `<img class="dock-ico" src="${APP_ICON[win.id]}" alt=""><span>${win.querySelector('.title-bar-text').textContent}</span>`;
       b.onclick = () => { st.closed = false; st.rolled = false; save(); render(win); focus(win); };
       dock.appendChild(b);
     }
@@ -54,6 +54,14 @@
     const st = stOf(win.id);
     focus(win);
     win.addEventListener('pointerdown', () => focus(win));
+
+    // icone na title-bar
+    const tb = win.querySelector('.title-bar');
+    if (APP_ICON[win.id] && !tb.querySelector('.title-ico')) {
+      const im = document.createElement('img');
+      im.className = 'title-ico'; im.src = APP_ICON[win.id]; im.alt = '';
+      tb.insertBefore(im, tb.firstChild);
+    }
 
     const bar = win.querySelector('.title-bar');
     bar.addEventListener('pointerdown', (e) => {
