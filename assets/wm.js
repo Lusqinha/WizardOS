@@ -19,6 +19,12 @@
     'win-sfx':     'assets/icons/sfx.png',
     'win-timers':  'assets/icons/timers.png',
   };
+  const TB_ICON = {
+    'win-track':   'assets/icons/track-tb.png',
+    'win-ambient': 'assets/icons/ambient-tb.png',
+    'win-sfx':     'assets/icons/sfx-tb.png',
+    'win-timers':  'assets/icons/timers-tb.png',
+  };
 
   let layout;
   try { layout = JSON.parse(localStorage.getItem(WM_KEY)) || {}; } catch { layout = {}; }
@@ -44,7 +50,7 @@
       const b = document.createElement('button');
       b.type = 'button';
       b.className = 'dock-app' + (st.closed ? '' : ' open');
-      b.innerHTML = `<img class="dock-ico" src="${APP_ICON[win.id]}" alt=""><span>${win.querySelector('.title-bar-text').textContent}</span>`;
+      b.innerHTML = `<img class="dock-ico" src="${TB_ICON[win.id]}" alt=""><span>${win.querySelector('.title-bar-text').textContent}</span>`;
       b.onclick = () => { st.closed = false; st.rolled = false; save(); render(win); focus(win); };
       dock.appendChild(b);
     }
