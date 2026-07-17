@@ -11,6 +11,7 @@
 </head>
 <body>
 <main id="desktop">
+  <div id="desk-icons"></div>
   <section class="window" id="win-track">
     <div class="title-bar"><div class="title-bar-text">Trilha</div>
       <div class="title-bar-controls"><button aria-label="Minimize" class="wm-min"></button><button aria-label="Close" class="wm-close"></button></div></div>

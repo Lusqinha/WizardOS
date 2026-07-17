@@ -95,6 +95,17 @@
     render(win);
   }
 
+  // atalhos na area de trabalho
+  const deskIcons = document.getElementById('desk-icons');
+  if (deskIcons) for (const win of wins) {
+    const b = document.createElement('button');
+    b.className = 'desk-ico';
+    b.type = 'button';
+    b.innerHTML = `<img src="${APP_ICON[win.id]}" alt=""><span>${win.querySelector('.title-bar-text').textContent}</span>`;
+    b.onclick = () => { stOf(win.id).closed = false; stOf(win.id).rolled = false; render(win); focus(win); };
+    deskIcons.appendChild(b);
+  }
+
   // botao Iniciar: abre/fecha o menu
   const startBtn = document.getElementById('start-btn');
   const startMenu = document.getElementById('start-menu');
