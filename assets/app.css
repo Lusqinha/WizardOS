@@ -72,7 +72,9 @@ body{margin:0;min-height:100vh;background:var(--wall);color:var(--ink);
   font-size:8px;padding:3px;color:#9a7d7a;letter-spacing:.3px;}
 
 /* --- override System.css (fontes Chicago dao 404) + escala --- */
-body, body *:not(.hn){font-family:'Silkscreen','Geneva',monospace !important;}
+body{font-size:12px !important;}
+body, body *:not(.hn){font-family:'Chicago_12','Geneva_9',monospace !important;}
+.menu-bar, .window .title, .dock-app{font-family:'Chicago','Chicago_12',monospace !important;}
 .timer .readout{font-family:'VT323',monospace !important;font-size:2rem !important;}
 #desktop .window{width:300px !important;}
 #add-dialog{position:fixed;inset:0;margin:auto;width:340px;max-width:92vw;
@@ -88,5 +90,7 @@ body, body *:not(.hn){font-family:'Silkscreen','Geneva',monospace !important;}
 #add-dialog .err{margin:0;font-size:10px;}
 #add-dialog menu{margin:0;padding:0;display:flex;gap:10px;justify-content:flex-end;}
 #add-dialog::backdrop{background:rgba(0,0,0,.25);}
-.title{font-size:11px !important;}
+.window .title{font-size:14px !important;font-weight:400 !important;}
+.menu-bar{font-size:12px !important;}
+.dock-app span{font-size:10px !important;text-transform:none !important;}
 .timer{margin-bottom:10px !important;}
