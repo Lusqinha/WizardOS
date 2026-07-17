@@ -230,7 +230,7 @@ function beep() {
   } catch (e) { /* WebAudio indisponível — silencioso */ }
 }
 
-function makeTimer(preset) {
+function makeTimer(preset, removable) {
   const el = document.createElement('div');
   el.className = 'timer';
   el.innerHTML = `
@@ -238,7 +238,8 @@ function makeTimer(preset) {
     <div>${preset.label}</div>
     <button class="t-start"><i class="hn hn-play-solid"></i></button>
     <button class="t-pause"><i class="hn hn-pause-solid"></i></button>
-    <button class="t-reset"><i class="hn hn-refresh"></i></button>`;
+    <button class="t-reset"><i class="hn hn-refresh"></i></button>
+    ${removable ? '<button class="t-del" title="remover"><i class="hn hn-times"></i></button>' : ''}`;
   const readout = el.querySelector('.readout');
   let remaining = preset.ms, targetAt = null, raf = null;
 
@@ -269,12 +270,29 @@ function makeTimer(preset) {
     targetAt = null; cancelAnimationFrame(raf); remaining = preset.ms;
     el.classList.remove('done'); readout.textContent = fmt(preset.ms);
   };
+  el.querySelector('.t-del')?.addEventListener('click', () => {
+    cancelAnimationFrame(raf); el.remove();
+  });
   return el;
 }
 
 function initTimers() {
   const host = document.getElementById('timers');
   TIMER_PRESETS.forEach(p => host.appendChild(makeTimer(p)));
+  // timer personalizado
+  const form = document.createElement('div');
+  form.className = 'timer-custom';
+  form.innerHTML = `<input type="number" min="1" max="600" placeholder="min" class="t-custom-min"><button class="t-custom-add">+ timer</button>`;
+  const input = form.querySelector('.t-custom-min');
+  const add = () => {
+    const n = parseInt(input.value, 10);
+    if (!n || n < 1) return;
+    host.insertBefore(makeTimer({ label: `${n} min`, ms: n * 60000 }, true), form);
+    input.value = '';
+  };
+  form.querySelector('.t-custom-add').onclick = add;
+  input.addEventListener('keydown', (e) => { if (e.key === 'Enter') add(); });
+  host.appendChild(form);
 }
 
 initTimers();
