@@ -87,11 +87,37 @@
     render(win);
   }
 
-  // botao Iniciar: reabre e foca todas as janelas
+  // botao Iniciar: abre/fecha o menu
   const startBtn = document.getElementById('start-btn');
-  if (startBtn) startBtn.addEventListener('click', () => {
+  const startMenu = document.getElementById('start-menu');
+  const importFile = document.getElementById('import-file');
+  const openAll = () => {
     for (const win of wins) { stOf(win.id).closed = false; stOf(win.id).rolled = false; render(win); focus(win); }
     save();
+  };
+  if (startBtn && startMenu) {
+    startBtn.addEventListener('click', (e) => { e.stopPropagation(); startMenu.hidden = !startMenu.hidden; });
+    document.addEventListener('click', () => { startMenu.hidden = true; });
+    startMenu.addEventListener('click', (e) => e.stopPropagation());
+    startMenu.querySelectorAll('button').forEach((b) => b.addEventListener('click', () => {
+      startMenu.hidden = true;
+      const act = b.dataset.act;
+      if (act === 'export') location.href = 'api.php?action=export';
+      else if (act === 'import') importFile.click();
+      else if (act === 'open-all') openAll();
+    }));
+  }
+  if (importFile) importFile.addEventListener('change', async () => {
+    if (!importFile.files[0]) return;
+    const fd = new FormData();
+    fd.append('file', importFile.files[0]);
+    try {
+      const res = await fetch('api.php?action=import', { method: 'POST', body: fd });
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error || 'erro');
+      location.reload();
+    } catch (ex) { alert('Falha ao importar: ' + ex.message); }
+    importFile.value = '';
   });
 
   // relogio no tray da taskbar

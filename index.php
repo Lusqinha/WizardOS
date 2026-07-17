@@ -39,6 +39,12 @@
   </section>
 </main>
 <footer id="credits">Pixel Icon Library — CC BY 4.0 (HackerNoon) · 98.css — MIT</footer>
+<div id="start-menu" hidden>
+  <button data-act="export">Exportar config (.zip)</button>
+  <button data-act="import">Importar config (.zip)</button>
+  <button data-act="open-all">Abrir todas as janelas</button>
+</div>
+<input type="file" id="import-file" accept=".zip,application/zip" hidden>
 <div id="taskbar">
   <button id="start-btn"><span class="win-flag"></span> Iniciar</button>
   <div id="dock"></div>

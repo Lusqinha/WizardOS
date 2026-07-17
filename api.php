@@ -117,6 +117,47 @@ if (PHP_SAPI !== 'cli') {
         save($DATA, $lib);
         $respond(['ok' => true]);
         break;
+      case 'export':
+        $zipPath = tempnam(sys_get_temp_dir(), 'rpgexp') . '.zip';
+        $zip = new ZipArchive();
+        $zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+        $zip->addFromString('library.json', json_encode($lib, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+        foreach ($lib['items'] as $it) {
+          if (($it['source'] ?? '') === 'mp3file') {
+            $f = $UPLOADS . '/' . basename((string)$it['ref']);
+            if (is_file($f)) $zip->addFile($f, 'uploads/' . basename((string)$it['ref']));
+          }
+        }
+        $zip->close();
+        header('Content-Type: application/zip');
+        header('Content-Disposition: attachment; filename="rpg-soundboard.zip"');
+        header('Content-Length: ' . filesize($zipPath));
+        readfile($zipPath);
+        unlink($zipPath);
+        exit;
+      case 'import':
+        if (!isset($_FILES['file'])) throw new ApiError('sem arquivo');
+        $zip = new ZipArchive();
+        if ($zip->open((string)$_FILES['file']['tmp_name']) !== true) throw new ApiError('zip invalido');
+        $json = $zip->getFromName('library.json');
+        if ($json === false) throw new ApiError('library.json ausente no zip');
+        $data = json_decode((string)$json, true);
+        if (!is_array($data) || !isset($data['items']) || !is_array($data['items'])) throw new ApiError('library.json invalido');
+        if (!is_dir($UPLOADS)) mkdir($UPLOADS, 0775, true);
+        for ($i = 0; $i < $zip->numFiles; $i++) {
+          $name = (string)$zip->getNameIndex($i);
+          if (preg_match('~^uploads/([^/\\\\]+\.mp3)$~i', $name, $m)) {
+            file_put_contents($UPLOADS . '/' . basename($m[1]), (string)$zip->getFromIndex($i));
+          }
+        }
+        $zip->close();
+        foreach ($data['items'] as &$it) {
+          if (($it['source'] ?? '') === 'mp3file') $it['ref'] = basename((string)$it['ref']);
+        }
+        unset($it);
+        save($DATA, ['items' => array_values($data['items'])]);
+        $respond(['ok' => true, 'count' => count($data['items'])]);
+        break;
       default:
         http_response_code(404);
         $respond(['ok' => false, 'error' => 'acao desconhecida']);
