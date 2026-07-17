@@ -87,7 +87,14 @@
     render(win);
   }
 
-  // relogio no menu-bar (estilo poolsuite)
+  // botao Iniciar: reabre e foca todas as janelas
+  const startBtn = document.getElementById('start-btn');
+  if (startBtn) startBtn.addEventListener('click', () => {
+    for (const win of wins) { stOf(win.id).closed = false; stOf(win.id).rolled = false; render(win); focus(win); }
+    save();
+  });
+
+  // relogio no tray da taskbar
   const clk = document.getElementById('clock');
   if (clk) {
     const WD = ['DOM','SEG','TER','QUA','QUI','SEX','SAB'];

@@ -10,7 +10,6 @@
 <link rel="stylesheet" href="assets/app.css">
 </head>
 <body>
-<div class="menu-bar"><span class="brand"><i class="hn hn-music-solid"></i> RPG Soundboard</span><span id="clock"></span></div>
 <main id="desktop">
   <section class="window" id="win-track">
     <div class="title-bar"><div class="title-bar-text">Trilha</div>
@@ -39,8 +38,12 @@
     <div class="window-body" id="timers"></div>
   </section>
 </main>
-<div id="dock"></div>
 <footer id="credits">Pixel Icon Library — CC BY 4.0 (HackerNoon) · 98.css — MIT</footer>
+<div id="taskbar">
+  <button id="start-btn"><span class="win-flag"></span> Iniciar</button>
+  <div id="dock"></div>
+  <div id="tray"><span id="clock"></span></div>
+</div>
 
 <dialog id="add-dialog" class="window" style="padding:0;max-width:340px">
   <div class="title-bar"><div class="title-bar-text">Adicionar</div></div>
