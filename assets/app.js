@@ -107,7 +107,7 @@ function renderTrackLike(cat) {
     ul.appendChild(li);
   }
   // slider de volume da janela (criado uma vez)
-  const pane = ul.closest('.window-pane');
+  const pane = ul.closest('.window-body');
   let vol = pane.querySelector('.vol');
   if (!vol) {
     vol = document.createElement('input');
