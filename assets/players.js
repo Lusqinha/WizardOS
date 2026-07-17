@@ -188,3 +188,18 @@ function renderSfx() {
     ul.appendChild(li);
   }
 }
+
+// --- Livros (PDF): visualizador nativo do navegador via iframe ---
+function renderBooks() {
+  const ul = document.querySelector('.book-list');
+  if (!ul) return;
+  ul.innerHTML = '';
+  for (const it of itemsOf('pdf')) {
+    const li = document.createElement('li');
+    li.innerHTML = `<button class="btn-book" title="Abrir">${escapeHtml(it.title)}</button>
+      <button class="btn-del" title="remover"><i class="hn hn-trash"></i></button>`;
+    li.querySelector('.btn-book').onclick = () => { document.querySelector('.book-view').src = srcOf(it); };
+    li.querySelector('.btn-del').onclick = () => removeItem(it.id);
+    ul.appendChild(li);
+  }
+}

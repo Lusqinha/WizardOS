@@ -24,6 +24,7 @@ async function refresh() {
   renderTrackLike('track');
   renderTrackLike('ambient');
   renderSfx();
+  renderBooks();
 }
 
 async function removeItem(id) {
@@ -41,7 +42,7 @@ let ytReady = new Promise(r => {
 });
 
 function srcOf(item) {
-  return item.source === 'mp3file' ? `uploads/${item.ref}` : item.ref;
+  return (item.source === 'mp3file' || item.source === 'pdffile') ? `uploads/${item.ref}` : item.ref;
 }
 
 function escapeHtml(s) {

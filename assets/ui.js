@@ -151,8 +151,26 @@ async function initNotes() {
   });
 }
 
+// --- Livros: upload de PDF ---
+function initBooks() {
+  const btn = document.querySelector('.btn-add-book');
+  const file = document.querySelector('.book-file');
+  if (!btn || !file) return;
+  btn.onclick = () => file.click();
+  file.addEventListener('change', async () => {
+    if (!file.files[0]) return;
+    const fd = new FormData();
+    fd.append('title', file.files[0].name.replace(/\.pdf$/i, ''));
+    fd.append('file', file.files[0]);
+    try { await api('upload-pdf', fd); await refresh(); }
+    catch (ex) { alert('Falha ao enviar PDF: ' + ex.message); }
+    file.value = '';
+  });
+}
+
 // --- Boot ---
 initSfxDelete();
 initTimers();
 initNotes();
+initBooks();
 refresh().catch(e => console.error(e));

@@ -102,6 +102,13 @@ body, body *:not(.hn){font-family:'ms_sans_serif','Pixelated MS Sans Serif',sans
 .timer-custom{display:flex;gap:6px;justify-content:center;align-items:center;margin-top:8px;padding-top:8px;border-top:1px solid #808080;}
 .timer-custom .t-custom-min{width:56px;}
 #notes{width:100%;height:160px;resize:vertical;box-sizing:border-box;font-family:'ms_sans_serif',sans-serif;font-size:12px;}
+.book-list{list-style:none;margin:0 0 8px;padding:0;}
+.book-list li{display:flex;align-items:center;gap:8px;padding:3px 0;border-bottom:1px dotted #b09b98;}
+.book-list .btn-book{flex:1;min-width:0;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.book-view{width:100%;height:380px;margin-top:8px;background:#fff;
+  border:1px solid #808080;border-color:#808080 #fff #fff #808080;}
+.book-view:not([src]),.book-view[src=""]{display:none;}
+#desktop #win-books{width:440px;}
 .timer .t-del{margin-left:4px;}
 #desktop .window{width:300px;min-width:230px;min-height:90px;resize:both;overflow:auto;}
 #add-dialog{position:fixed;inset:0;margin:auto;width:340px;max-width:92vw;

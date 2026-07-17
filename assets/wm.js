@@ -1,7 +1,7 @@
 // Window manager: arrastar, focar, minimizar (windowshade) e fechar/reabrir (dock).
 // Layout persistido em localStorage.
 (() => {
-  const WM_KEY = 'rpg-wm';
+  const WM_KEY = 'wizardos-wm';
   const desktop = document.getElementById('desktop');
   const dock = document.getElementById('dock');
   const wins = [...desktop.querySelectorAll('.window')];
@@ -20,6 +20,7 @@
     'win-sfx':     'assets/icons/sfx.png',
     'win-timers':  'assets/icons/timers.png',
     'win-notes':   'assets/icons/notes.png',
+    'win-books':   'assets/icons/books.png',
   };
   const TB_ICON = {
     'win-track':   'assets/icons/track-tb.png',
@@ -27,11 +28,13 @@
     'win-sfx':     'assets/icons/sfx-tb.png',
     'win-timers':  'assets/icons/timers-tb.png',
     'win-notes':   'assets/icons/notes-tb.png',
+    'win-books':   'assets/icons/books-tb.png',
   };
 
   let layout;
   try { layout = JSON.parse(localStorage.getItem(WM_KEY)) || {}; } catch { layout = {}; }
-  const stOf = (id) => layout[id] || (layout[id] = { ...(DEFAULTS[id] || { x: 40, y: 40 }) });
+  // Janelas comecam FECHADAS por padrao (abre pela dock / icones do desktop).
+  const stOf = (id) => layout[id] || (layout[id] = { ...(DEFAULTS[id] || { x: 40, y: 40 }), closed: true });
   const save = () => localStorage.setItem(WM_KEY, JSON.stringify(layout));
 
   function render(win) {

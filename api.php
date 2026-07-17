@@ -4,7 +4,8 @@ declare(strict_types=1);
 class ApiError extends Exception {}
 
 const MAX_UPLOAD = 30 * 1024 * 1024;
-const CATEGORIES = ['track', 'ambient', 'sfx'];
+const MAX_PDF = 100 * 1024 * 1024;
+const CATEGORIES = ['track', 'ambient', 'sfx', 'pdf'];
 
 function uuid(): string { return bin2hex(random_bytes(8)); }
 
@@ -53,12 +54,12 @@ function validate_upload(array $file, int $max): void {
   if ($mime !== 'audio/mpeg') throw new ApiError('so arquivos mp3');
 }
 
-function record_file(array $lib, string $cat, string $title, string $filename): array {
+function record_file(array $lib, string $cat, string $title, string $filename, string $source = 'mp3file'): array {
   if (!in_array($cat, CATEGORIES, true)) throw new ApiError('categoria invalida');
   $title = trim($title);
   if ($title === '') throw new ApiError('titulo vazio');
   $lib['items'][] = [
-    'id' => uuid(), 'category' => $cat, 'source' => 'mp3file',
+    'id' => uuid(), 'category' => $cat, 'source' => $source,
     'title' => $title, 'ref' => $filename, 'loop' => $cat === 'ambient',
   ];
   return $lib;
@@ -68,7 +69,7 @@ function delete_item(array $lib, string $id, string $uploadsDir): array {
   $kept = [];
   foreach ($lib['items'] as $it) {
     if (($it['id'] ?? null) === $id) {
-      if (($it['source'] ?? '') === 'mp3file') {
+      if (in_array($it['source'] ?? '', ['mp3file', 'pdffile'], true)) {
         $f = $uploadsDir . '/' . basename((string)$it['ref']);
         $real = realpath($f);
         if ($real !== false && str_starts_with($real, (string)realpath($uploadsDir))) @unlink($real);
@@ -86,7 +87,7 @@ function sanitize_item(array $it): ?array {
   $cat = (string)($it['category'] ?? '');
   $src = (string)($it['source'] ?? '');
   if (!in_array($cat, CATEGORIES, true)) return null;
-  if (!in_array($src, ['youtube', 'mp3url', 'mp3file'], true)) return null;
+  if (!in_array($src, ['youtube', 'mp3url', 'mp3file', 'pdffile'], true)) return null;
   $title = trim((string)($it['title'] ?? ''));
   if ($title === '') return null;
   $ref = (string)($it['ref'] ?? '');
@@ -134,6 +135,19 @@ if (PHP_SAPI !== 'cli') {
         $name = uuid() . '.mp3';
         if (!move_uploaded_file($_FILES['file']['tmp_name'], "$UPLOADS/$name")) throw new ApiError('nao salvou o arquivo');
         $lib = record_file($lib, (string)($_POST['category'] ?? ''), (string)($_POST['title'] ?? ''), $name);
+        save($DATA, $lib);
+        $respond(['ok' => true, 'item' => end($lib['items'])]);
+        break;
+      case 'upload-pdf':
+        if (!isset($_FILES['file'])) throw new ApiError('sem arquivo');
+        $f = $_FILES['file'];
+        if ((int)($f['error'] ?? 1) !== UPLOAD_ERR_OK) throw new ApiError('falha no upload');
+        if ((int)($f['size'] ?? 0) > MAX_PDF) throw new ApiError('PDF grande demais (max 100MB)');
+        if ((new finfo(FILEINFO_MIME_TYPE))->file((string)$f['tmp_name']) !== 'application/pdf') throw new ApiError('so arquivos PDF');
+        if (!is_dir($UPLOADS)) mkdir($UPLOADS, 0775, true);
+        $name = uuid() . '.pdf';
+        if (!move_uploaded_file($f['tmp_name'], "$UPLOADS/$name")) throw new ApiError('nao salvou o arquivo');
+        $lib = record_file($lib, 'pdf', (string)($_POST['title'] ?? ''), $name, 'pdffile');
         save($DATA, $lib);
         $respond(['ok' => true, 'item' => end($lib['items'])]);
         break;

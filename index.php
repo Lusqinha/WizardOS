@@ -47,6 +47,16 @@
       <div class="title-bar-controls"><button aria-label="Minimize" class="wm-min"></button><button aria-label="Close" class="wm-close"></button></div></div>
     <div class="window-body"><textarea id="notes" placeholder="Anotações da mesa..."></textarea></div>
   </section>
+  <section class="window" id="win-books">
+    <div class="title-bar"><div class="title-bar-text">Livros</div>
+      <div class="title-bar-controls"><button aria-label="Minimize" class="wm-min"></button><button aria-label="Close" class="wm-close"></button></div></div>
+    <div class="window-body">
+      <ul class="book-list"></ul>
+      <button class="btn-add-book"><i class="hn hn-plus"></i> adicionar PDF</button>
+      <input type="file" class="book-file" accept="application/pdf" hidden>
+      <iframe class="book-view" title="Visualizador de PDF"></iframe>
+    </div>
+  </section>
 </main>
 <footer id="credits">Ta em desenvolvimento ainda pae</footer>
 <div id="start-menu" hidden>
