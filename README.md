@@ -6,7 +6,7 @@ Soundboard + timers para mestre de RPG, estilo OS retrô pixelado.
 
 ```
 mise install
-mise exec -- php -S localhost:8000
+mise exec -- php -d upload_max_filesize=256M -d post_max_size=256M -S localhost:8000
 # abrir http://localhost:8000
 ```
 

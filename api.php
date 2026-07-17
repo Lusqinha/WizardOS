@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+ini_set('display_errors', '0'); // nunca cuspir HTML de warning na resposta JSON
+
 class ApiError extends Exception {}
 
 const MAX_UPLOAD = 30 * 1024 * 1024;
@@ -111,6 +113,11 @@ if (PHP_SAPI !== 'cli') {
 
   $respond = fn(array $p) => print(json_encode($p, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
   try {
+    // upload multipart que estourou post_max_size chega sem $_FILES: erro claro em vez de HTML
+    if (str_contains($_SERVER['CONTENT_TYPE'] ?? '', 'multipart/form-data') && empty($_FILES)
+        && (int)($_SERVER['CONTENT_LENGTH'] ?? 0) > 0) {
+      throw new ApiError('arquivo grande demais para o servidor (aumente post_max_size / upload_max_filesize)');
+    }
     $lib = load($DATA);
     switch ($action) {
       case 'list':
