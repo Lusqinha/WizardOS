@@ -1,4 +1,4 @@
-# RPG Soundboard
+# WizardOS
 
 Soundboard + timers para mestre de RPG, estilo OS retrô pixelado.
 

@@ -4,9 +4,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>RPG Soundboard</title>
-<link rel="icon" href="favicon.ico" sizes="any">
-<link rel="icon" type="image/png" href="assets/icons/track.png">
+<title>WizardOS</title>
+<link rel="icon" href="assets/favicon.ico" sizes="any">
 <link rel="stylesheet" href="assets/98.css">
 <link rel="stylesheet" href="assets/pixel-icons.css">
 <link rel="stylesheet" href="assets/app.css">
