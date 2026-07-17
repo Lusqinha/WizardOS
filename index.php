@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>RPG Soundboard</title>
-<link rel="stylesheet" href="assets/system.css">
+<link rel="stylesheet" href="assets/98.css">
 <link rel="stylesheet" href="assets/pixel-icons.css">
 <link rel="stylesheet" href="assets/app.css">
 </head>
@@ -13,38 +13,38 @@
 <div class="menu-bar"><span class="brand"><i class="hn hn-music-solid"></i> RPG Soundboard</span><span id="clock"></span></div>
 <main id="desktop">
   <section class="window" id="win-track">
-    <div class="title-bar"><h1 class="title">Trilha</h1>
-      <div class="wm-btns"><button class="wm-min" title="Minimizar"><i class="hn hn-minus"></i></button><button class="wm-close" title="Fechar"><i class="hn hn-times"></i></button></div></div>
-    <div class="window-pane"><ul class="item-list" data-cat="track"></ul>
+    <div class="title-bar"><div class="title-bar-text">Trilha</div>
+      <div class="title-bar-controls"><button aria-label="Minimize" class="wm-min"></button><button aria-label="Close" class="wm-close"></button></div></div>
+    <div class="window-body"><ul class="item-list" data-cat="track"></ul>
       <button class="btn-add" data-cat="track"><i class="hn hn-plus"></i> adicionar</button>
     </div>
   </section>
   <section class="window" id="win-ambient">
-    <div class="title-bar"><h1 class="title">Ambiente</h1>
-      <div class="wm-btns"><button class="wm-min" title="Minimizar"><i class="hn hn-minus"></i></button><button class="wm-close" title="Fechar"><i class="hn hn-times"></i></button></div></div>
-    <div class="window-pane"><ul class="item-list" data-cat="ambient"></ul>
+    <div class="title-bar"><div class="title-bar-text">Ambiente</div>
+      <div class="title-bar-controls"><button aria-label="Minimize" class="wm-min"></button><button aria-label="Close" class="wm-close"></button></div></div>
+    <div class="window-body"><ul class="item-list" data-cat="ambient"></ul>
       <button class="btn-add" data-cat="ambient"><i class="hn hn-plus"></i> adicionar</button>
     </div>
   </section>
   <section class="window" id="win-sfx">
-    <div class="title-bar"><h1 class="title">Efeitos</h1>
-      <div class="wm-btns"><button class="wm-min" title="Minimizar"><i class="hn hn-minus"></i></button><button class="wm-close" title="Fechar"><i class="hn hn-times"></i></button></div></div>
-    <div class="window-pane"><ul class="sfx-grid" data-cat="sfx"></ul>
+    <div class="title-bar"><div class="title-bar-text">Efeitos</div>
+      <div class="title-bar-controls"><button aria-label="Minimize" class="wm-min"></button><button aria-label="Close" class="wm-close"></button></div></div>
+    <div class="window-body"><ul class="sfx-grid" data-cat="sfx"></ul>
       <button class="btn-add" data-cat="sfx"><i class="hn hn-plus"></i> adicionar</button>
     </div>
   </section>
   <section class="window" id="win-timers">
-    <div class="title-bar"><h1 class="title">Timers</h1>
-      <div class="wm-btns"><button class="wm-min" title="Minimizar"><i class="hn hn-minus"></i></button><button class="wm-close" title="Fechar"><i class="hn hn-times"></i></button></div></div>
-    <div class="window-pane" id="timers"></div>
+    <div class="title-bar"><div class="title-bar-text">Timers</div>
+      <div class="title-bar-controls"><button aria-label="Minimize" class="wm-min"></button><button aria-label="Close" class="wm-close"></button></div></div>
+    <div class="window-body" id="timers"></div>
   </section>
 </main>
 <div id="dock"></div>
-<footer id="credits">Pixel Icon Library — CC BY 4.0 (HackerNoon) · System.css — MIT</footer>
+<footer id="credits">Pixel Icon Library — CC BY 4.0 (HackerNoon) · 98.css — MIT</footer>
 
 <dialog id="add-dialog" class="window" style="padding:0;max-width:340px">
-  <div class="title-bar"><h1 class="title">Adicionar</h1></div>
-  <form method="dialog" class="window-pane" id="add-form">
+  <div class="title-bar"><div class="title-bar-text">Adicionar</div></div>
+  <form method="dialog" class="window-body" id="add-form">
     <input type="hidden" name="category">
     <p class="field-row-stacked"><label>Título</label><input name="title" required></p>
     <p class="field-row-stacked"><label>Tipo</label>

@@ -44,7 +44,7 @@
       const b = document.createElement('button');
       b.type = 'button';
       b.className = 'dock-app' + (st.closed ? '' : ' open');
-      b.innerHTML = `<i class="hn ${ICONS[win.id] || 'hn-square'}"></i><span>${win.querySelector('.title').textContent}</span>`;
+      b.innerHTML = `<i class="hn ${ICONS[win.id] || 'hn-square'}"></i><span>${win.querySelector('.title-bar-text').textContent}</span>`;
       b.onclick = () => { st.closed = false; st.rolled = false; save(); render(win); focus(win); };
       dock.appendChild(b);
     }

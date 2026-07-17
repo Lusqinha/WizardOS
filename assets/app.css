@@ -29,8 +29,8 @@ body{margin:0;min-height:100vh;background:var(--wall);color:var(--ink);
 .wm-btns button:active i.hn{color:#fff;}
 .wm-btns i.hn{font-size:11px;}
 .item-list .btn-play i.hn,.timer button i.hn{font-size:14px;}
-.window.rolled .window-pane{display:none;}
-.window-pane{padding:12px;background:#fff;}
+.window.rolled .window-body{display:none;}
+.window-body{padding:12px;}
 
 /* listas de itens */
 .item-list{list-style:none;margin:0 0 10px;padding:0;}
@@ -73,14 +73,14 @@ body{margin:0;min-height:100vh;background:var(--wall);color:var(--ink);
 
 /* --- override System.css (fontes Chicago dao 404) + escala --- */
 body{font-size:12px !important;}
-body, body *:not(.hn){font-family:'Chicago_12','Geneva_9',monospace !important;}
-.menu-bar, .window .title, .dock-app{font-family:'Chicago','Chicago_12',monospace !important;}
+body, body *:not(.hn){font-family:'ms_sans_serif','Pixelated MS Sans Serif',sans-serif !important;}
+.menu-bar, .dock-app{font-weight:bold;}
 .timer .readout{font-family:'VT323',monospace !important;font-size:2rem !important;}
 #desktop .window{width:300px !important;}
 #add-dialog{position:fixed;inset:0;margin:auto;width:340px;max-width:92vw;
   height:max-content;max-height:90vh;overflow:visible;
   box-shadow:3px 3px 0 rgba(0,0,0,.3);}
-#add-dialog .window-pane{padding:18px 20px 16px;overflow:visible;
+#add-dialog .window-body{padding:18px 20px 16px;overflow:visible;
   display:flex;flex-direction:column;gap:16px;}
 #add-dialog .field-row-stacked{margin:0;display:flex;flex-direction:column;gap:6px;}
 #add-dialog .field-row-stacked label{font-size:11px;letter-spacing:.3px;}
