@@ -31,7 +31,11 @@ async function removeItem(id) {
 }
 
 // --- Helpers compartilhados ---
-let ytReady = new Promise(r => { window.onYouTubeIframeAPIReady = r; });
+let ytReady = new Promise(r => {
+  if (window.YT && window.YT.Player) { r(); return; } // API ja carregou (defer race)
+  const prev = window.onYouTubeIframeAPIReady;
+  window.onYouTubeIframeAPIReady = () => { if (typeof prev === 'function') prev(); r(); };
+});
 
 function srcOf(item) {
   return item.source === 'mp3file' ? `uploads/${item.ref}` : item.ref;
