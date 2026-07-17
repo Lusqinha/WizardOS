@@ -1,4 +1,5 @@
 # WizardOS
+<img width="2559" height="907" alt="image" src="https://github.com/user-attachments/assets/7887feda-92a1-4bc0-8be6-a51111926ec5" />
 
 Soundboard + timers para mestre de RPG, estilo OS retrô pixelado.
 
