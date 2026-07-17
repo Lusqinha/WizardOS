@@ -14,28 +14,28 @@
 <main id="desktop">
   <section class="window" id="win-track">
     <div class="title-bar"><h1 class="title">Trilha</h1>
-      <div class="title-bar-controls"><button class="wm-min" aria-label="Minimize"></button><button class="wm-close" aria-label="Close"></button></div></div>
+      <div class="wm-btns"><button class="wm-min" title="Minimizar"><i class="hn hn-minus"></i></button><button class="wm-close" title="Fechar"><i class="hn hn-times"></i></button></div></div>
     <div class="window-pane"><ul class="item-list" data-cat="track"></ul>
       <button class="btn-add" data-cat="track"><i class="hn hn-plus"></i> adicionar</button>
     </div>
   </section>
   <section class="window" id="win-ambient">
     <div class="title-bar"><h1 class="title">Ambiente</h1>
-      <div class="title-bar-controls"><button class="wm-min" aria-label="Minimize"></button><button class="wm-close" aria-label="Close"></button></div></div>
+      <div class="wm-btns"><button class="wm-min" title="Minimizar"><i class="hn hn-minus"></i></button><button class="wm-close" title="Fechar"><i class="hn hn-times"></i></button></div></div>
     <div class="window-pane"><ul class="item-list" data-cat="ambient"></ul>
       <button class="btn-add" data-cat="ambient"><i class="hn hn-plus"></i> adicionar</button>
     </div>
   </section>
   <section class="window" id="win-sfx">
     <div class="title-bar"><h1 class="title">Efeitos</h1>
-      <div class="title-bar-controls"><button class="wm-min" aria-label="Minimize"></button><button class="wm-close" aria-label="Close"></button></div></div>
+      <div class="wm-btns"><button class="wm-min" title="Minimizar"><i class="hn hn-minus"></i></button><button class="wm-close" title="Fechar"><i class="hn hn-times"></i></button></div></div>
     <div class="window-pane"><ul class="sfx-grid" data-cat="sfx"></ul>
       <button class="btn-add" data-cat="sfx"><i class="hn hn-plus"></i> adicionar</button>
     </div>
   </section>
   <section class="window" id="win-timers">
     <div class="title-bar"><h1 class="title">Timers</h1>
-      <div class="title-bar-controls"><button class="wm-min" aria-label="Minimize"></button><button class="wm-close" aria-label="Close"></button></div></div>
+      <div class="wm-btns"><button class="wm-min" title="Minimizar"><i class="hn hn-minus"></i></button><button class="wm-close" title="Fechar"><i class="hn hn-times"></i></button></div></div>
     <div class="window-pane" id="timers"></div>
   </section>
 </main>

@@ -96,7 +96,7 @@ function renderTrackLike(cat) {
   for (const it of itemsOf(cat)) {
     const li = document.createElement('li');
     const playing = layer.currentId === it.id;
-    const icon = playing && !layer.paused ? 'hn-pause' : 'hn-play';
+    const icon = playing && !layer.paused ? 'hn-pause-solid' : 'hn-play-solid';
     li.innerHTML = `
       <button class="btn-play"><i class="hn ${icon}"></i></button>
       <span class="title-txt">${escapeHtml(it.title)}</span>
@@ -236,8 +236,8 @@ function makeTimer(preset) {
   el.innerHTML = `
     <div class="readout">${fmt(preset.ms)}</div>
     <div>${preset.label}</div>
-    <button class="t-start"><i class="hn hn-play"></i></button>
-    <button class="t-pause"><i class="hn hn-pause"></i></button>
+    <button class="t-start"><i class="hn hn-play-solid"></i></button>
+    <button class="t-pause"><i class="hn hn-pause-solid"></i></button>
     <button class="t-reset"><i class="hn hn-refresh"></i></button>`;
   const readout = el.querySelector('.readout');
   let remaining = preset.ms, targetAt = null, raf = null;
