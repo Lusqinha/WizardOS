@@ -97,14 +97,6 @@
       e.preventDefault();
     });
 
-    // trava o resize pra a janela nao passar da taskbar (altura maxima ate o topo dela)
-    const TASKBAR = 34;
-    new ResizeObserver(() => {
-      const rect = win.getBoundingClientRect();
-      const overflow = rect.bottom - (window.innerHeight - TASKBAR);
-      if (overflow > 0) win.style.height = Math.max(90, win.offsetHeight - overflow) + 'px';
-    }).observe(win);
-
     win.querySelector('.wm-min')?.addEventListener('click', () => {
       st.rolled = !st.rolled; save(); render(win);
     });
