@@ -42,21 +42,56 @@ function escapeHtml(s) {
 }
 
 // --- Camadas de áudio (Trilha / Ambiente): um player por janela ---
+function fmtTime(s) {
+  s = Math.max(0, Math.floor(s || 0));
+  return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+}
+
 class Layer {
-  constructor(name) { this.name = name; this.audio = null; this.yt = null;
-    this.currentId = null; this.volume = 0.8; this.paused = false; }
+  constructor(name) {
+    this.name = name; this.audio = null; this.yt = null;
+    this.currentId = null; this.volume = 0.8; this.paused = false; this.ticker = null;
+    this.body = document.querySelector(`.item-list[data-cat="${name}"]`).closest('.window-body');
+    this.nowEl = document.createElement('div');
+    this.nowEl.className = 'now-playing'; this.nowEl.hidden = true;
+    this.body.appendChild(this.nowEl);
+  }
 
   async play(item) {
     this.stop();
     this.currentId = item.id; this.paused = false;
+    this.nowEl.hidden = false;
+    this.nowEl.innerHTML = `
+      <div class="np-title">${escapeHtml(item.title)}</div>
+      <div class="np-media"></div>
+      <div class="np-row"><span class="np-cur">0:00</span>
+        <input type="range" class="np-seek" min="0" max="0" value="0" step="0.1">
+        <span class="np-dur">0:00</span></div>`;
+    const media = this.nowEl.querySelector('.np-media');
+    const seek = this.nowEl.querySelector('.np-seek');
+    seek.addEventListener('input', () => {
+      const v = parseFloat(seek.value);
+      if (this.audio) this.audio.currentTime = v;
+      if (this.yt && this.yt.seekTo) this.yt.seekTo(v, true);
+    });
     if (item.source === 'youtube') {
       await ytReady;
       const host = document.createElement('div');
-      document.getElementById('yt-hosts').appendChild(host);
+      media.appendChild(host);
       this.yt = new YT.Player(host, {
-        videoId: item.ref,
-        playerVars: { autoplay: 1, loop: item.loop ? 1 : 0, playlist: item.loop ? item.ref : undefined },
-        events: { onReady: e => e.target.setVolume(this.volume * 100) },
+        width: '240', height: '135', videoId: item.ref,
+        playerVars: { autoplay: 1, playsinline: 1, loop: item.loop ? 1 : 0, playlist: item.loop ? item.ref : undefined },
+        events: {
+          onReady: e => { e.target.setVolume(this.volume * 100); e.target.playVideo(); },
+          onError: e => {
+            console.error('YT error', e.data);
+            const msg = (e.data === 101 || e.data === 150)
+              ? 'vídeo proíbe embed — abra no YouTube'
+              : 'erro YT ' + e.data;
+            const t = this.nowEl.querySelector('.np-title');
+            if (t) t.innerHTML += ` <a href="https://youtu.be/${item.ref}" target="_blank">(${msg})</a>`;
+          },
+        },
       });
     } else {
       this.audio = new Audio(srcOf(item));
@@ -64,7 +99,23 @@ class Layer {
       this.audio.volume = this.volume;
       this.audio.play().catch(e => console.error('play falhou', e));
     }
+    this.startTicker();
     renderTrackLike(this.name);
+  }
+
+  startTicker() {
+    clearInterval(this.ticker);
+    this.ticker = setInterval(() => {
+      const seek = this.nowEl.querySelector('.np-seek');
+      if (!seek) return;
+      let cur = 0, dur = 0;
+      if (this.audio) { cur = this.audio.currentTime; dur = this.audio.duration || 0; }
+      else if (this.yt && this.yt.getDuration) { cur = this.yt.getCurrentTime() || 0; dur = this.yt.getDuration() || 0; }
+      if (dur && isFinite(dur)) seek.max = dur;
+      if (document.activeElement !== seek) seek.value = cur;
+      this.nowEl.querySelector('.np-cur').textContent = fmtTime(cur);
+      this.nowEl.querySelector('.np-dur').textContent = fmtTime(dur);
+    }, 500);
   }
 
   pauseToggle() {
@@ -81,9 +132,11 @@ class Layer {
   }
 
   stop() {
+    clearInterval(this.ticker); this.ticker = null;
     if (this.audio) { this.audio.pause(); this.audio = null; }
     if (this.yt) { this.yt.destroy(); this.yt = null; }
     this.currentId = null; this.paused = false;
+    if (this.nowEl) { this.nowEl.hidden = true; this.nowEl.innerHTML = ''; }
   }
 }
 

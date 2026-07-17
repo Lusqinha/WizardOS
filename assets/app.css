@@ -40,6 +40,14 @@ body{margin:0;min-height:100vh;background:var(--wall);color:var(--ink);
 .item-list .title-txt{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .item-list button i.hn,.sfx-grid button i.hn,.timer button i.hn{font-style:normal;}
 .vol{width:100%;margin-top:4px;}
+.now-playing{margin:8px 0;padding:6px;background:#fff;
+  border:1px solid #808080;border-color:#808080 #fff #fff #808080;}
+.now-playing[hidden]{display:none;}
+.np-title{font-weight:bold;margin-bottom:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.np-media:empty{display:none;}
+.np-media iframe{display:block;max-width:100%;margin-bottom:5px;}
+.np-row{display:flex;align-items:center;gap:6px;font-size:11px;}
+.np-seek{flex:1;min-width:0;}
 
 .sfx-grid{list-style:none;margin:0 0 10px;padding:0;display:grid;grid-template-columns:repeat(2,1fr);gap:6px;}
 .sfx-grid li{display:flex;gap:2px;}
