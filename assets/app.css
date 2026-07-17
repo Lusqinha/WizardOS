@@ -8,7 +8,8 @@ body{margin:0;min-height:100vh;background:var(--wall);color:var(--ink);
 #clock{font-weight:400;}
 
 /* desktop + janelas */
-#desktop{position:relative;min-height:calc(100vh - 120px);overflow:hidden;padding:8px;}
+#desktop{position:relative;min-height:calc(100vh - 40px);overflow:visible;padding:8px;}
+body{overflow-x:hidden;}
 #desktop .window{position:absolute;width:320px;box-shadow:3px 3px 0 rgba(0,0,0,.22);}
 .window .title-bar{user-select:none;position:relative;}
 #desktop .window .title-bar{cursor:move;}
@@ -91,8 +92,6 @@ body{margin:0;min-height:100vh;background:var(--wall);color:var(--ink);
   padding:7px 10px;font-size:12px;box-shadow:none;}
 #start-menu button:hover{background:#000080;color:#fff;}
 
-#credits{position:fixed;bottom:36px;left:0;width:100%;text-align:center;
-  font-size:9px;padding:3px;color:#bfe3e3;letter-spacing:.3px;}
 
 /* --- override System.css (fontes Chicago dao 404) + escala --- */
 body{font-size:12px !important;}

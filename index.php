@@ -58,7 +58,6 @@
     </div>
   </section>
 </main>
-<footer id="credits">Ta em desenvolvimento ainda pae</footer>
 <div id="start-menu" hidden>
   <button data-act="export">Exportar config (.zip)</button>
   <button data-act="import">Importar config (.zip)</button>
