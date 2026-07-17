@@ -26,6 +26,7 @@ async function refresh() {
 }
 
 async function removeItem(id) {
+  for (const g of Object.values(groups)) if (g.isPlaying(id)) g.stopItem(id);
   await api('delete', { id });
   await refresh();
 }
@@ -51,33 +52,42 @@ function fmtTime(s) {
   return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
 }
 
-class Layer {
-  constructor(name) {
-    this.name = name; this.audio = null; this.yt = null;
-    this.currentId = null; this.volume = 0.8; this.paused = false; this.ticker = null;
-    this.body = document.querySelector(`.item-list[data-cat="${name}"]`).closest('.window-body');
-    this.nowEl = document.createElement('div');
-    this.nowEl.className = 'now-playing'; this.nowEl.hidden = true;
-    this.body.appendChild(this.nowEl);
+// Um player por item ativo (audio/yt) com painel now-playing minimizavel.
+class Player {
+  constructor(item, group) {
+    this.item = item; this.group = group;
+    this.audio = null; this.yt = null; this.ticker = null; this.minimized = false;
+    this.el = document.createElement('div');
+    this.el.className = 'now-playing';
+    group.body.appendChild(this.el);
   }
 
-  async play(item) {
-    this.stop();
-    this.currentId = item.id; this.paused = false;
-    this.nowEl.hidden = false;
-    this.nowEl.innerHTML = `
-      <div class="np-title">${escapeHtml(item.title)}</div>
+  async start() {
+    const item = this.item;
+    this.el.innerHTML = `
+      <div class="np-head">
+        <span class="np-title">${escapeHtml(item.title)}</span>
+        <button class="np-min" title="Minimizar player"><i class="hn hn-minus"></i></button>
+        <button class="np-stop" title="Parar"><i class="hn hn-times"></i></button>
+      </div>
       <div class="np-media"></div>
       <div class="np-row"><span class="np-cur">0:00</span>
         <input type="range" class="np-seek" min="0" max="0" value="0" step="0.1">
         <span class="np-dur">0:00</span></div>`;
-    const media = this.nowEl.querySelector('.np-media');
-    const seek = this.nowEl.querySelector('.np-seek');
+    const media = this.el.querySelector('.np-media');
+    const seek = this.el.querySelector('.np-seek');
     seek.addEventListener('input', () => {
       const v = parseFloat(seek.value);
       if (this.audio) this.audio.currentTime = v;
       if (this.yt && this.yt.seekTo) this.yt.seekTo(v, true);
     });
+    this.el.querySelector('.np-min').onclick = () => {
+      this.minimized = !this.minimized;
+      this.el.classList.toggle('mini', this.minimized);
+    };
+    this.el.querySelector('.np-stop').onclick = () => this.group.stopItem(item.id);
+
+    const vol = this.group.volume;
     if (item.source === 'youtube') {
       await ytReady;
       const host = document.createElement('div');
@@ -86,13 +96,11 @@ class Layer {
         width: '240', height: '135', videoId: item.ref,
         playerVars: { autoplay: 1, playsinline: 1, loop: item.loop ? 1 : 0, playlist: item.loop ? item.ref : undefined },
         events: {
-          onReady: e => { e.target.setVolume(this.volume * 100); e.target.playVideo(); },
+          onReady: e => { e.target.setVolume(vol * 100); e.target.playVideo(); },
           onError: e => {
             console.error('YT error', e.data);
-            const msg = (e.data === 101 || e.data === 150)
-              ? 'vídeo proíbe embed — abra no YouTube'
-              : 'erro YT ' + e.data;
-            const t = this.nowEl.querySelector('.np-title');
+            const msg = (e.data === 101 || e.data === 150) ? 'vídeo proíbe embed — abra no YouTube' : 'erro YT ' + e.data;
+            const t = this.el.querySelector('.np-title');
             if (t) t.innerHTML += ` <a href="https://youtu.be/${item.ref}" target="_blank">(${msg})</a>`;
           },
         },
@@ -100,66 +108,78 @@ class Layer {
     } else {
       this.audio = new Audio(srcOf(item));
       this.audio.loop = item.loop;
-      this.audio.volume = this.volume;
+      this.audio.volume = vol;
       this.audio.play().catch(e => console.error('play falhou', e));
     }
     this.startTicker();
-    renderTrackLike(this.name);
   }
 
   startTicker() {
     clearInterval(this.ticker);
     this.ticker = setInterval(() => {
-      const seek = this.nowEl.querySelector('.np-seek');
+      const seek = this.el.querySelector('.np-seek');
       if (!seek) return;
       let cur = 0, dur = 0;
       if (this.audio) { cur = this.audio.currentTime; dur = this.audio.duration || 0; }
       else if (this.yt && this.yt.getDuration) { cur = this.yt.getCurrentTime() || 0; dur = this.yt.getDuration() || 0; }
       if (dur && isFinite(dur)) seek.max = dur;
       if (document.activeElement !== seek) seek.value = cur;
-      this.nowEl.querySelector('.np-cur').textContent = fmtTime(cur);
-      this.nowEl.querySelector('.np-dur').textContent = fmtTime(dur);
+      this.el.querySelector('.np-cur').textContent = fmtTime(cur);
+      this.el.querySelector('.np-dur').textContent = fmtTime(dur);
     }, 500);
   }
 
-  pauseToggle() {
-    this.paused = !this.paused;
-    if (this.yt) { this.paused ? this.yt.pauseVideo() : this.yt.playVideo(); }
-    if (this.audio) { this.paused ? this.audio.pause() : this.audio.play(); }
-    renderTrackLike(this.name);
-  }
-
   setVolume(v) {
-    this.volume = v;
     if (this.yt && this.yt.setVolume) this.yt.setVolume(v * 100);
     if (this.audio) this.audio.volume = v;
   }
 
-  stop() {
+  destroy() {
     clearInterval(this.ticker); this.ticker = null;
     if (this.audio) { this.audio.pause(); this.audio = null; }
     if (this.yt) { this.yt.destroy(); this.yt = null; }
-    this.currentId = null; this.paused = false;
-    if (this.nowEl) { this.nowEl.hidden = true; this.nowEl.innerHTML = ''; }
+    this.el.remove();
   }
 }
 
-const layers = { track: new Layer('track'), ambient: new Layer('ambient') };
+// Grupo por janela. single=true toca um por vez (Trilha); false permite varios (Ambiente).
+class Group {
+  constructor(name, single) {
+    this.name = name; this.single = single; this.volume = 0.8; this.players = new Map();
+    this.body = document.querySelector(`.item-list[data-cat="${name}"]`).closest('.window-body');
+  }
+  isPlaying(id) { return this.players.has(id); }
+  async toggle(item) {
+    if (this.players.has(item.id)) { this.stopItem(item.id); return; }
+    if (this.single) for (const id of [...this.players.keys()]) this.stopItem(id);
+    const p = new Player(item, this);
+    this.players.set(item.id, p);
+    renderTrackLike(this.name);
+    await p.start();
+  }
+  stopItem(id) {
+    const p = this.players.get(id);
+    if (p) { p.destroy(); this.players.delete(id); }
+    renderTrackLike(this.name);
+  }
+  setVolume(v) { this.volume = v; for (const p of this.players.values()) p.setVolume(v); }
+}
+
+const groups = { track: new Group('track', true), ambient: new Group('ambient', false) };
 
 function renderTrackLike(cat) {
-  const layer = layers[cat];
+  const group = groups[cat];
   const ul = document.querySelector(`.item-list[data-cat="${cat}"]`);
   ul.innerHTML = '';
   for (const it of itemsOf(cat)) {
     const li = document.createElement('li');
-    const playing = layer.currentId === it.id;
-    const icon = playing && !layer.paused ? 'hn-pause-solid' : 'hn-play-solid';
+    const playing = group.isPlaying(it.id);
+    const icon = playing ? 'hn-pause-solid' : 'hn-play-solid';
     li.innerHTML = `
       <button class="btn-play"><i class="hn ${icon}"></i></button>
       <span class="title-txt">${escapeHtml(it.title)}</span>
       <button class="btn-del"><i class="hn hn-trash"></i></button>`;
-    li.querySelector('.btn-play').onclick = () =>
-      playing ? layer.pauseToggle() : layer.play(it);
+    li.querySelector('.btn-play').onclick = () => group.toggle(it);
     li.querySelector('.btn-del').onclick = () => removeItem(it.id);
     ul.appendChild(li);
   }
@@ -169,8 +189,8 @@ function renderTrackLike(cat) {
   if (!vol) {
     vol = document.createElement('input');
     vol.type = 'range'; vol.min = 0; vol.max = 1; vol.step = 0.01;
-    vol.value = layer.volume; vol.className = 'vol';
-    vol.oninput = () => layer.setVolume(parseFloat(vol.value));
+    vol.value = group.volume; vol.className = 'vol';
+    vol.oninput = () => group.setVolume(parseFloat(vol.value));
     ul.after(vol);
   }
 }
